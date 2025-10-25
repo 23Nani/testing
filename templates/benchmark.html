@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <h1 class="text-center mb-4"><i class="bi bi-speedometer2 text-primary"></i> Performance Benchmarks</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">LWE Performance Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <label for="benchmarkMessage" class="form-label">Test Message:</label>
+                        <input type="text" class="form-control" id="benchmarkMessage" 
+                            value="Quantum-resistant encryption test!">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary w-100" id="runBenchmarkBtn">
+                            <i class="bi bi-play-fill"></i> Run Benchmark
+                        </button>
+                    </div>
+                </div>
+                <div id="benchmarkStatus" class="mt-3"></div>
+            </div>
+        </div>
+
+        <div id="benchmarkResults" style="display: none;">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Performance Comparison</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-table"></i> Detailed Results</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>Security Level</th>
+                                    <th>Parameters (n, q)</th>
+                                    <th>Key Gen (ms)</th>
+                                    <th>Encrypt (ms)</th>
+                                    <th>Decrypt (ms)</th>
+                                    <th>Total (ms)</th>
+                                    <th>Expansion Ratio</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Understanding the Results</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Key Metrics Explained:</h6>
+                    <ul>
+                        <li><strong>Key Generation Time:</strong> Time to create public/private key pair</li>
+                        <li><strong>Encryption Time:</strong> Time to encrypt the message</li>
+                        <li><strong>Decryption Time:</strong> Time to decrypt the ciphertext</li>
+                        <li><strong>Expansion Ratio:</strong> How much larger the ciphertext is compared to plaintext</li>
+                    </ul>
+
+                    <h6 class="mt-3">Security vs Performance Trade-offs:</h6>
+                    <ul>
+                        <li><strong>Toy:</strong> Fast but insecure - for learning only</li>
+                        <li><strong>Medium:</strong> Balanced - suitable for demonstrations</li>
+                        <li><strong>Strong:</strong> Slower but quantum-resistant - production ready</li>
+                    </ul>
+
+                    <div class="alert alert-info mt-3">
+                        <strong>Note:</strong> LWE has larger ciphertext sizes compared to traditional encryption, but provides quantum resistance. This is a necessary trade-off for future-proof security.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-shield-check"></i> Comparison with Traditional Encryption</h5>
+                </div>
+                <div class="card-body">
+                    <h6>LWE vs RSA/ECC:</h6>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>RSA/ECC</th>
+                                <th>LWE (This Implementation)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Quantum Resistant</td>
+                                <td><span class="badge bg-danger">No</span></td>
+                                <td><span class="badge bg-success">Yes</span></td>
+                            </tr>
+                            <tr>
+                                <td>Key Size</td>
+                                <td>Small (2-4 KB)</td>
+                                <td>Moderate (0.5-8 KB)</td>
+                            </tr>
+                            <tr>
+                                <td>Ciphertext Size</td>
+                                <td>Similar to plaintext</td>
+                                <td>Larger (expansion ratio)</td>
+                            </tr>
+                            <tr>
+                                <td>Speed</td>
+                                <td>Fast (hardware optimized)</td>
+                                <td>Moderate (newer algorithms)</td>
+                            </tr>
+                            <tr>
+                                <td>Security Basis</td>
+                                <td>Factoring / Discrete Log</td>
+                                <td>Lattice Problems</td>
+                            </tr>
+                            <tr>
+                                <td>Future-Proof</td>
+                                <td><span class="badge bg-danger">Vulnerable</span></td>
+                                <td><span class="badge bg-success">Protected</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/benchmark.js') }}"></script>
+{% endblock %}

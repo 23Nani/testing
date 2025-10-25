@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    .card {
+        background: #1a1a1a !important;
+        border: 1px solid #333 !important;
+    }
+    .card-body {
+        background: #1a1a1a !important;
+        color: #e9ecef !important;
+    }
+    .card-body p, .card-body li, .card-body td, .card-body th {
+        color: #e9ecef !important;
+    }
+    .card-body .text-muted {
+        color: #6c757d !important;
+    }
+    .card-body .lead {
+        color: #e9ecef !important;
+    }
+    .card-body table {
+        color: #e9ecef !important;
+        background: #1a1a1a !important;
+    }
+    .card-body table th {
+        background: #2d2d2d !important;
+        color: #e9ecef !important;
+    }
+    .card-body table td {
+        background: #1a1a1a !important;
+        color: #e9ecef !important;
+        border-color: #333 !important;
+    }
+    .alert {
+        background: #2d2d2d !important;
+        border-color: #444 !important;
+        color: #e9ecef !important;
+    }
+    .alert-info {
+        background: #0c5460 !important;
+        border-color: #0c5460 !important;
+    }
+    .alert-danger {
+        background: #721c24 !important;
+        border-color: #721c24 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <h1 class="text-center mb-4 text-white"><i class="bi bi-book-fill text-primary"></i> Understanding LWE Encryption</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">What is Learning With Errors (LWE)?</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">LWE is a <strong class="text-white">post-quantum cryptographic</strong> system that secures data against both classical and quantum computer attacks.</p>
+                
+                <h5 class="mt-4 text-white"><i class="bi bi-lightbulb text-warning"></i> Core Concept</h5>
+                <p>Security relies on the hardness of solving "noisy" linear equations. Authorized users can remove the mathematical noise; attackers cannot.</p>
+                
+                <div class="alert alert-info">
+                    <strong>Key Difference:</strong> Unlike RSA (factoring) or ECC (discrete logarithms), LWE's security doesn't collapse under quantum attacks!
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Mathematical Foundation</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="text-white"><i class="bi bi-calculator text-info"></i> Polynomial Ring Arithmetic</h5>
+                <p>LWE operates in the ring: \( R_q = \mathbb{Z}_q[x]/(x^n+1) \)</p>
+                <ul>
+                    <li><strong class="text-white">Modular Algebra:</strong> All operations are modulo \( q \) (a prime number)</li>
+                    <li><strong class="text-white">Polynomial Rings:</strong> Polynomials of degree up to \( n-1 \)</li>
+                    <li><strong class="text-white">Reduction:</strong> \( x^n = -1 \), so \( x^{n+k} = -x^k \)</li>
+                </ul>
+
+                <h5 class="mt-4 text-white"><i class="bi bi-key text-warning"></i> Key Generation</h5>
+                <p>1. Choose secret key: \( s \in R_q \) (small polynomial)<br>
+                2. Sample random: \( a \in R_q \)<br>
+                3. Sample error: \( e \) from discrete Gaussian distribution<br>
+                4. Compute: \( b = a \cdot s + e \pmod{q} \)</p>
+                
+                <p><strong class="text-white">Public Key:</strong> \( (a, b) \) &nbsp;&nbsp;&nbsp; <strong class="text-white">Private Key:</strong> \( s \)</p>
+
+                <h5 class="mt-4 text-white"><i class="bi bi-lock text-success"></i> Encryption</h5>
+                <p>To encrypt message \( m \):<br>
+                1. Choose random: \( r \in R_q \) (small polynomial)<br>
+                2. Sample errors: \( e_1, e_2 \)<br>
+                3. Compute ciphertext:<br>
+                &nbsp;&nbsp;\( u = a \cdot r + e_1 \)<br>
+                &nbsp;&nbsp;\( v = b \cdot r + e_2 + m \cdot \lfloor q/2 \rfloor \)</p>
+
+                <h5 class="mt-4 text-white"><i class="bi bi-unlock text-info"></i> Decryption</h5>
+                <p>To decrypt ciphertext \( (u, v) \) using secret key \( s \):<br>
+                \( m' = v - u \cdot s \approx m \cdot \lfloor q/2 \rfloor + \text{(small noise)} \)<br>
+                Round to recover \( m \)</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-warning">
+                <h4 class="mb-0">Real-World Applications</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-white"><i class="bi bi-bank text-primary"></i> Financial Security</h5>
+                        <p>Protect banking and payment systems from future quantum attacks</p>
+                        
+                        <h5 class="text-white"><i class="bi bi-hospital text-success"></i> Healthcare Privacy</h5>
+                        <p>Secure medical records with quantum-resistant encryption</p>
+                        
+                        <h5 class="text-white"><i class="bi bi-shield-check text-info"></i> Government & Defense</h5>
+                        <p>Protect classified information for decades into the future</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-white"><i class="bi bi-cloud text-primary"></i> Secure Cloud Computing</h5>
+                        <p>Process encrypted data in untrusted cloud environments</p>
+                        
+                        <h5 class="text-white"><i class="bi bi-cpu text-success"></i> IoT & Infrastructure</h5>
+                        <p>Quantum-resistant security for critical systems</p>
+                        
+                        <h5 class="text-white"><i class="bi bi-currency-bitcoin text-warning"></i> Blockchain</h5>
+                        <p>Protect cryptocurrencies from quantum threats</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4 border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="bi bi-exclamation-triangle"></i> The Quantum Threat: "Store Now, Decrypt Later"</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">Adversaries are harvesting encrypted data TODAY to decrypt when quantum computers arrive!</p>
+                
+                <div class="alert alert-danger">
+                    <strong>Urgency:</strong> Data encrypted with RSA or ECC today may be vulnerable within 10-15 years. Migration to post-quantum cryptography must happen NOW.
+                </div>
+                
+                <h5 class="text-white">Why LWE is Quantum-Resistant:</h5>
+                <ul>
+                    <li><strong class="text-white">No efficient quantum algorithm exists</strong> to solve LWE problems</li>
+                    <li><strong class="text-white">NIST standardized</strong> as part of post-quantum cryptography suite</li>
+                    <li><strong class="text-white">Mathematically proven</strong> hardness assumptions</li>
+                    <li><strong class="text-white">Lattice-based</strong> security resists both classical and quantum attacks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Security Parameters</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>n (degree)</th>
+                            <th>q (modulus)</th>
+                            <th>σ (noise)</th>
+                            <th>Security</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge bg-secondary">Toy</span></td>
+                            <td>16</td>
+                            <td>97</td>
+                            <td>1.5</td>
+                            <td>Educational only (0 bits)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-warning text-dark">Medium</span></td>
+                            <td>256</td>
+                            <td>4093</td>
+                            <td>3.2</td>
+                            <td>~80 bits (Demo)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-success">Strong</span></td>
+                            <td>512</td>
+                            <td>12289</td>
+                            <td>3.2</td>
+                            <td>~128 bits (NIST Level 1)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
